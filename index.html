@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人学习效率小助手</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#timer" data-page-link="timer">
+      <span class="brand-icon">学</span>
+      <span>个人学习效率小助手</span>
+    </a>
+    <nav class="top-tabs" aria-label="功能页面">
+      <a class="active" href="#timer" data-page-link="timer">番茄钟</a>
+      <a href="#todo" data-page-link="todo">待办清单</a>
+      <a href="#stats" data-page-link="stats">学习统计</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button">深色模式</button>
+  </header>
+
+  <main class="app-shell">
+    <section class="app-page active" id="page-timer" data-page="timer">
+      <div class="page-intro">
+        <p class="hello">专注一下......</p>
+        <h1>番茄钟</h1>
+      </div>
+
+      <section class="today-focus-card">
+        <span>今日专注</span>
+        <strong id="heroTodayMinutes">00:00</strong>
+        <small id="dailyGoalText">今日目标 120 分钟</small>
+      </section>
+
+      <div class="mode-tabs" aria-label="计时模式">
+        <button class="mode-tab active" type="button" data-mode="focus">专注</button>
+        <button class="mode-tab" type="button" data-mode="short">短休息</button>
+        <button class="mode-tab" type="button" data-mode="long">长休息</button>
+      </div>
+
+      <section class="timer-card">
+        <p id="timerState">专注时间</p>
+        <span class="active-task" id="activeTaskText">当前没有绑定待办</span>
+        <div class="timer-ring" id="timerRing">
+          <div>
+            <strong id="timerText">25:00</strong>
+          </div>
+        </div>
+        <div class="dot-row" id="roundDots" aria-hidden="true">
+          <span class="active"></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="control-row">
+          <button id="resetBtn" class="round-btn" type="button" aria-label="重置">↻</button>
+          <button id="startBtn" class="play-btn" type="button" aria-label="开始">▶</button>
+          <button id="pauseBtn" class="round-btn" type="button" aria-label="暂停">Ⅱ</button>
+        </div>
+      </section>
+
+      <button class="setting-link" id="openSettingsBtn" type="button">设置</button>
+
+      <section class="settings-panel" id="settingsPanel" aria-label="设置时长">
+        <label>
+          专注
+          <input id="focusInput" type="number" value="25" min="1" max="120" />
+          分钟
+        </label>
+        <label>
+          短休息
+          <input id="shortBreakInput" type="number" value="5" min="1" max="60" />
+          分钟
+        </label>
+        <label>
+          长休息
+          <input id="longBreakInput" type="number" value="15" min="1" max="90" />
+          分钟
+        </label>
+        <label class="switch-row">
+          自动进入专注模式
+          <input id="autoFocusToggle" type="checkbox" />
+        </label>
+        <label class="switch-row">
+          待办勾选开始后自动计时
+          <input id="autoTodoToggle" type="checkbox" />
+        </label>
+        <label>
+          每日目标
+          <input id="dailyGoalInput" type="number" value="120" min="10" max="720" />
+          分钟
+        </label>
+      </section>
+    </section>
+
+    <section class="app-page" id="page-todo" data-page="todo">
+      <div class="page-intro">
+        <p class="hello">先把事情写下来</p>
+        <h1>待办清单</h1>
+      </div>
+
+      <form class="todo-form" id="todoForm">
+        <input id="todoInput" type="text" placeholder="输入待办事项" autocomplete="off" />
+        <input id="dateInput" type="date" />
+        <button type="submit">添加</button>
+      </form>
+
+      <div class="todo-summary">
+        <span id="todoCount">0 项待完成</span>
+        <div class="filter-tabs" role="tablist" aria-label="待办筛选">
+          <button class="filter active" type="button" data-filter="all">全部</button>
+          <button class="filter" type="button" data-filter="unfinished">未完成</button>
+          <button class="filter" type="button" data-filter="finished">已完成</button>
+        </div>
+      </div>
+
+      <ul class="todo-list" id="todoList"></ul>
+
+      <section class="habit-panel">
+        <div class="panel-title">
+          <div>
+            <p>每日习惯</p>
+            <h2>习惯打卡</h2>
+          </div>
+          <span id="habitCount">0/0</span>
+        </div>
+        <form class="habit-form" id="habitForm">
+          <input id="habitInput" type="text" placeholder="例如：背单词、阅读 30 分钟" />
+          <button type="submit">添加习惯</button>
+        </form>
+        <ul class="habit-list" id="habitList"></ul>
+      </section>
+    </section>
+
+    <section class="app-page" id="page-stats" data-page="stats">
+      <div class="page-intro">
+        <p class="hello">看看最近的节奏</p>
+        <h1>学习时长统计</h1>
+      </div>
+
+      <div class="stats-grid">
+        <article>
+          <span id="todayMinutes">0</span>
+          <p>今日学习 / 分钟</p>
+        </article>
+        <article>
+          <span id="weekMinutes">0</span>
+          <p>本周学习 / 分钟</p>
+        </article>
+      </div>
+
+      <form class="record-form" id="recordForm">
+        <input id="manualMinutes" type="number" min="1" placeholder="手动添加学习分钟数" />
+        <select id="subjectInput" aria-label="学习科目">
+          <option value="综合">综合</option>
+          <option value="英语">英语</option>
+          <option value="科研">科研</option>
+          <option value="专业课">专业课</option>
+          <option value="阅读">阅读</option>
+        </select>
+        <button type="submit">记录</button>
+      </form>
+
+      <section class="chart-panel">
+        <div class="panel-title">
+          <div>
+            <p>可视化报表</p>
+            <h2 id="chartTitle">本周学习柱状图</h2>
+          </div>
+          <div class="export-actions">
+            <button id="barChartBtn" type="button">柱状图</button>
+            <button id="pieChartBtn" type="button">饼图</button>
+            <button id="exportImageBtn" type="button">导出图片</button>
+          </div>
+        </div>
+        <div class="bar-chart" id="weekChart"></div>
+        <div class="pie-chart hidden" id="subjectChart"></div>
+      </section>
+
+      <section class="badge-panel">
+        <div class="panel-title">
+          <div>
+            <p>激励机制</p>
+            <h2>成就徽章</h2>
+          </div>
+        </div>
+        <div class="badge-list" id="badgeList"></div>
+      </section>
+
+      <section class="history-panel">
+        <div class="panel-title">
+          <div>
+            <p>导出报告</p>
+            <h2>最近记录</h2>
+          </div>
+          <div class="export-actions">
+            <button id="exportWeekBtn" type="button">周报 PDF</button>
+            <button id="exportMonthBtn" type="button">月报 PDF</button>
+          </div>
+        </div>
+        <div id="recordText"></div>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="底部导航">
+    <a class="active" href="#timer" data-page-link="timer">
+      <span>◎</span>
+      专注
+    </a>
+    <a href="#todo" data-page-link="todo">
+      <span>▣</span>
+      待办
+    </a>
+    <a href="#stats" data-page-link="stats">
+      <span>▥</span>
+      统计
+    </a>
+  </nav>
+
+  <script src="./app.js"></script>
+</body>
+</html>
